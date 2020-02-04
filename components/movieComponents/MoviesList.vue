@@ -2,36 +2,37 @@
   <v-container>
     <v-container v-if="loading">
       <div class="text-xs-center">
-        <v-progress-circular :size="150" :width="8" indeterminate color="green" />
+        <v-progress-circular :size="150" :width="8" indeterminate value="showWait" color="green" >
+          {{ showWait }}
+        </v-progress-circular>
       </div>
     </v-container>
 
     <v-container v-else grid-list-xl>
       <div class="text-center">
         <v-carousel
+          :hide-delimiters="true"
           cycle
-          height="450"
+          height="400"
           hide-delimiter-background
           show-arrows-on-hover
         >
           <v-carousel-item
-            v-for="(slide, i) in currentMoviesList"
+            v-for="(slide, i) in carouselMoviesList"
             :key="i"
           >
             <v-row
               class="fill-height"
-              align="center"
               justify="center"
             >
               <div>
                 <v-card>
-                  <v-img :src="slide.image ? slide.image.medium : ''" aspect-ratio="1" />
+                  <v-img :src="slide.image ? slide.image.medium : ''" height="200" aspect-ratio="1" />
                   <v-card-title primary-title>
                     <div>
-                      <h2>{{ slide.Title }}</h2>
+                      <h2>{{ slide.name }}</h2>
                       <div>Year: {{ slide.premiered }}</div>
                       <div>Type: {{ slide.type }}</div>
-                      <div>IMDB-id: {{ slide.imdbID }}</div>
                     </div>
                   </v-card-title>
 
@@ -49,13 +50,13 @@
       <v-layout wrap style="padding-top: 10px">
         <v-flex v-for="(item, index) in currentMoviesList" :key="index" xs4 mb-2>
           <v-card>
-            <v-img :src="item.image ? item.image.medium : ''" aspect-ratio="1" />
+            <v-img :src="item.image ? item.image.medium : ''" />
             <v-card-title primary-title>
               <div>
-                <h2>{{ item.Title }}</h2>
+                <!-- <div>{{ item.name }}</div> -->
+                <h2>{{ item.name }}</h2>
                 <div>Year: {{ item.premiered }}</div>
                 <div>Type: {{ item.type }}</div>
-                <div>IMDB-id: {{ item.imdbID }}</div>
               </div>
             </v-card-title>
 
@@ -97,9 +98,12 @@ export default {
       movieName: this.$route.params.name,
       moviesList: [],
       currentMoviesList: [],
+      carouselMoviesList: [],
+      moviesByRating: [],
       loading: true,
       pages: 0,
-      page: 1
+      page: 1,
+      showWait: 'Prepare for AWESOME!'
     }
   },
   mounted () {
@@ -121,7 +125,15 @@ export default {
     },
     next (page) {
       this.currentMoviesList = this.moviesList.slice(page > 1 ? (page - 1) * 9 : 0, page * 9)
-      console.log(this.currentMoviesList)
+      this.getHighestRatingMovies()
+      this.carouselMoviesList = this.moviesByRating.slice(0, 9)
+      // console.log(this.currentMoviesList)
+    },
+    getHighestRatingMovies () {
+      const allMovies = this.moviesList.slice()
+      this.moviesByRating = allMovies.sort((a, b) =>
+        (a.rating.average > b.rating.average) ? -1 : 1
+      )
     }
   }
 }
