@@ -1,71 +1,14 @@
 <template>
   <v-container>
     <v-container v-if="loading">
-      <div class="text-xs-center">
-        <v-progress-circular :size="150" :width="8" indeterminate value="showWait" color="green" >
-          {{ showWait }}
-        </v-progress-circular>
-      </div>
+      <Progress showWait='Prepare for AWESOME!' />
     </v-container>
 
     <v-container v-else grid-list-xl>
-      <div class="text-center">
-        <v-carousel
-          :hide-delimiters="true"
-          cycle
-          height="400"
-          hide-delimiter-background
-          show-arrows-on-hover
-        >
-          <v-carousel-item
-            v-for="(slide, i) in carouselMoviesList"
-            :key="i"
-          >
-            <v-row
-              class="fill-height"
-              justify="center"
-            >
-              <div>
-                <v-card>
-                  <v-img :src="slide.image ? slide.image.medium : ''" height="200" aspect-ratio="1" />
-                  <v-card-title primary-title>
-                    <div>
-                      <h2>{{ slide.name }}</h2>
-                      <div>Year: {{ slide.premiered }}</div>
-                      <div>Type: {{ slide.type }}</div>
-                    </div>
-                  </v-card-title>
-
-                  <v-card-actions class="justify-center">
-                    <v-btn @click="singleMovie(slide.id)" text color="green">
-                      View
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </div>
-            </v-row>
-          </v-carousel-item>
-        </v-carousel>
-      </div>
+      <BestMovies :allMoviesList="ratedgMovies" />
       <v-layout wrap style="padding-top: 10px">
         <v-flex v-for="(item, index) in currentMoviesList" :key="index" xs4 mb-2>
-          <v-card>
-            <v-img :src="item.image ? item.image.medium : ''" />
-            <v-card-title primary-title>
-              <div>
-                <!-- <div>{{ item.name }}</div> -->
-                <h2>{{ item.name }}</h2>
-                <div>Year: {{ item.premiered }}</div>
-                <div>Type: {{ item.type }}</div>
-              </div>
-            </v-card-title>
-
-            <v-card-actions class="justify-center">
-              <v-btn @click="singleMovie(item.id)" text color="green">
-                View
-              </v-btn>
-            </v-card-actions>
-          </v-card>
+          <SingleMovie :movie="item" />
         </v-flex>
       </v-layout>
       <div class="text-center">
@@ -91,8 +34,16 @@
 
 <script>
 import mazeApi from '@/middleware/MazeApi'
+import Progress from '~/components/progressComponents/Progress'
+import BestMovies from '~/components/movieComponents/CarouselMovies'
+import SingleMovie from '~/components/movieComponents/SingleMovie'
 
 export default {
+  components: {
+    Progress,
+    BestMovies,
+    SingleMovie
+  },
   data () {
     return {
       movieName: this.$route.params.name,
@@ -119,15 +70,17 @@ export default {
         console.log(error)
       })
   },
-  methods: {
-    singleMovie (id) {
-      this.$router.push('/movies/' + id)
-    },
-    next (page) {
-      this.currentMoviesList = this.moviesList.slice(page > 1 ? (page - 1) * 9 : 0, page * 9)
+  computed: {
+    ratedgMovies () {
       this.getHighestRatingMovies()
-      this.carouselMoviesList = this.moviesByRating.slice(0, 9)
-      // console.log(this.currentMoviesList)
+      return this.moviesByRating.slice(0, 9)
+    }
+  },
+  methods: {
+    next (page) {
+      console.log(page)
+      this.currentMoviesList = this.moviesList.slice(page > 1 ? (page - 1) * 9 : 0, page * 9)
+      console.log(this.currentMoviesList)
     },
     getHighestRatingMovies () {
       const allMovies = this.moviesList.slice()

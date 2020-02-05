@@ -1,9 +1,7 @@
 <template>
   <v-container>
     <v-container v-if="loading">
-      <div class="text-xs-center">
-        <v-progress-circular :size="150" :width="8" indeterminate color="green" />
-      </div>
+      <Progress showWait="Prepare for AWESOME MOVIES SEARCH!" />
     </v-container>
 
     <v-container v-else grid-list-xl style="padding-top: 60px">
@@ -34,8 +32,12 @@
 
 <script>
 import mazeApi from '@/middleware/MazeApi'
+import Progress from '~/components/progressComponents/Progress'
 
 export default {
+  components: {
+    Progress
+  },
   data () {
     return {
       movieName: this.$route.params.name,
