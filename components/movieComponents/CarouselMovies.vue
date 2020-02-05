@@ -1,5 +1,8 @@
 <template>
   <div class="text-center">
+    <h3>
+      {{ 'Highest ratings!' }}
+    </h3>
     <v-carousel
       :hide-delimiters="true"
       cycle
@@ -18,7 +21,7 @@
   </div>
 </template>
 <script>
-import SingleMovie from '~/components/movieComponents/SingleMovie'
+import SingleMovie from '~/components/movieComponents/MovieCard'
 
 export default {
   components: {

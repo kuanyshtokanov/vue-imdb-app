@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-container v-if="loading">
-      <Progress showWait='Prepare for AWESOME!' />
+      <Progress showWait="Prepare for AWESOME!" />
     </v-container>
 
     <v-container v-else grid-list-xl>
@@ -36,7 +36,7 @@
 import mazeApi from '@/middleware/MazeApi'
 import Progress from '~/components/progressComponents/Progress'
 import BestMovies from '~/components/movieComponents/CarouselMovies'
-import SingleMovie from '~/components/movieComponents/SingleMovie'
+import SingleMovie from '~/components/movieComponents/MovieCard'
 
 export default {
   components: {
@@ -46,15 +46,19 @@ export default {
   },
   data () {
     return {
-      movieName: this.$route.params.name,
       moviesList: [],
       currentMoviesList: [],
-      carouselMoviesList: [],
       moviesByRating: [],
       loading: true,
       pages: 0,
       page: 1,
       showWait: 'Prepare for AWESOME!'
+    }
+  },
+  computed: {
+    ratedgMovies () {
+      this.getHighestRatingMovies()
+      return this.moviesByRating.slice(0, 9)
     }
   },
   mounted () {
@@ -70,17 +74,9 @@ export default {
         console.log(error)
       })
   },
-  computed: {
-    ratedgMovies () {
-      this.getHighestRatingMovies()
-      return this.moviesByRating.slice(0, 9)
-    }
-  },
   methods: {
     next (page) {
-      console.log(page)
       this.currentMoviesList = this.moviesList.slice(page > 1 ? (page - 1) * 9 : 0, page * 9)
-      console.log(this.currentMoviesList)
     },
     getHighestRatingMovies () {
       const allMovies = this.moviesList.slice()

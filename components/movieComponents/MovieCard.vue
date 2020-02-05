@@ -1,15 +1,18 @@
 <template>
   <v-card>
-    <v-img :src="singleMovie.image ? singleMovie.image.medium : ''" :height="imgHeight" :aspect-ratio="imgRatio" />
+    <v-img :src="singleMovie.image ? singleMovie.image.medium : ''" :height="imgHeight" :aspect-ratio="imgRatio" contain />
     <v-card-title primary-title>
       <div>
-        <h2>{{ singleMovie.name }}</h2>
+        <h3>Rating: {{ singleMovie.rating.average }}</h3>
+        <div>Type: {{ singleMovie.type }}</div>
         <div>Year: {{ singleMovie.premiered }}</div>
         <div>Type: {{ singleMovie.type }}</div>
       </div>
     </v-card-title>
     <v-card-actions class="justify-center">
-      <v-btn @click="chooseMovie(singleMovie.id)" text color="green">View</v-btn>
+      <v-btn @click="chooseMovie(singleMovie.id)" text color="green">
+        View
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -23,11 +26,6 @@ export default {
       imgRatio: this.ratio
     }
   },
-  methods: {
-    chooseMovie (id) {
-      this.$router.push('/movies/' + id)
-    }
-  },
   watch: {
     movie (val) {
       this.singleMovie = val
@@ -37,6 +35,11 @@ export default {
     },
     imgRatio (val) {
       this.imgRatio = val
+    }
+  },
+  methods: {
+    chooseMovie (id) {
+      this.$router.push('/movies/' + id)
     }
   }
 }

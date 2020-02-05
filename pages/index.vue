@@ -12,11 +12,6 @@ import Movies from '~/components/movieComponents/MoviesList'
 export default {
   components: {
     Movies
-  },
-  data () {
-    return {
-      searchString: ''
-    }
   }
 }
 </script>
