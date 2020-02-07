@@ -1,29 +1,18 @@
 <template>
   <v-app>
     <v-container>
-      <v-container v-if="loading">
-        <Progress showWait="Prepare for AWESOME MOVIES SEARCH!" />
-      </v-container>
-      <v-container v-else grid-list-xl style="padding-top: 60px">
-        <v-layout wrap>
-          <v-flex v-for="(item, index) in moviesList" :key="index" xs4 mb-2>
-            <SingleMovie :movie="item.show" />
-          </v-flex>
-        </v-layout>
-      </v-container>
+      <MoviesList :moviesSearch = "moviesList" />
     </v-container>
   </v-app>
 </template>
 
 <script>
 import mazeApi from '@/middleware/MazeApi'
-import Progress from '~/components/progressComponents/Progress'
-import SingleMovie from '~/components/movieComponents/MovieCard'
+import MoviesList from '~/components/movieComponents/MoviesList'
 
 export default {
   components: {
-    Progress,
-    SingleMovie
+    MoviesList
   },
   data () {
     return {

@@ -5,13 +5,13 @@
     </v-container>
 
     <v-container v-else grid-list-xl>
-      <BestMovies :allMoviesList="ratedgMovies" />
+      <BestMovies :allMoviesList="ratedgMovies" :height="450" />
       <v-layout wrap style="padding-top: 10px">
-        <v-flex v-for="(item, index) in currentMoviesList" :key="index" xs4 mb-2>
-          <SingleMovie :movie="item" />
+        <v-flex v-for="(item, index) in this.currentMoviesList" :key="index" xs2 mb-2  class="my-2">
+          <SingleMovie :movie="item.show ? item.show : item" />
         </v-flex>
       </v-layout>
-      <div class="text-center">
+      <div v-if="pages > 0" class="text-center">
         <v-container>
           <v-row justify="center">
             <v-col cols="8">
@@ -39,6 +39,7 @@ import BestMovies from '~/components/movieComponents/CarouselMovies'
 import SingleMovie from '~/components/movieComponents/MovieCard'
 
 export default {
+  props: ['moviesSearch'],
   components: {
     Progress,
     BestMovies,
@@ -47,7 +48,7 @@ export default {
   data () {
     return {
       moviesList: [],
-      currentMoviesList: [],
+      currentMoviesList: this.moviesSearch ? this.moviesSearch : [],
       moviesByRating: [],
       loading: true,
       pages: 0,
@@ -62,13 +63,21 @@ export default {
     }
   },
   mounted () {
+    // Workaround for cases when component is used in search page -
+    // 0 pages when on search page
+    // MAX_PAGES_NUM when others, because we dont know how many pages in total
+    this.pages = this.$route.params.name ? 0 : process.env.MAX_PAGES_NUM
+    this.currentMoviesList = this.moviesSearch
     mazeApi
       .fetchAllShows()
       .then((response) => {
         this.moviesList = response
         this.loading = false
-        this.pages = Math.ceil(response.length / process.env.MAX_ITEMS_ON_PAGE)
-        this.next(1)
+        // Workaround for cases when component is used in search page -
+        // it does not need to load pagination because search by name API does not give paginated response
+        if (!this.$route.params.name) {
+          this.next(1)
+        }
       })
       .catch((error) => {
         console.log(error)
@@ -76,13 +85,27 @@ export default {
   },
   methods: {
     next (page) {
-      this.currentMoviesList = this.moviesList.slice(page > 1 ? (page - 1) * 9 : 0, page * 9)
+      this.loading = true
+      mazeApi
+        .fetchAllShowsByPage(page)
+        .then((response) => {
+          this.currentMoviesList = response
+          this.loading = false
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     },
     getHighestRatingMovies () {
       const allMovies = this.moviesList.slice()
       this.moviesByRating = allMovies.sort((a, b) =>
         (a.rating.average > b.rating.average) ? -1 : 1
       )
+    }
+  },
+  watch: {
+    moviesSearch (val) {
+      this.currentMoviesList = val
     }
   }
 }

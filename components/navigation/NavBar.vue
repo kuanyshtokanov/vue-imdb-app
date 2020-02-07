@@ -17,6 +17,7 @@
       <v-text-field
         v-model="searchString"
         label="Movie Name"
+        v-on:keyup.enter="searchMovie"
       />
     </v-flex>
     <v-btn
@@ -24,7 +25,7 @@
       @click="searchMovie"
       text
     >
-      <span class="mr-2">Search</span>
+      Search
     </v-btn>
   </v-app-bar>
 </template>

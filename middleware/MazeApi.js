@@ -18,8 +18,16 @@ export default {
       })
   },
 
-  fetchAllShows (id) {
+  fetchAllShows () {
     return axios.get(process.env.SHOWS_LOOKUP)
+      .then((response) => {
+        console.log(response.data)
+        return response.data
+      })
+  },
+
+  fetchAllShowsByPage (page) {
+    return axios.get(process.env.SHOWS_LOOKUP + '?page=' + page)
       .then((response) => {
         console.log(response.data)
         return response.data

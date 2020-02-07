@@ -99,6 +99,7 @@ export default {
     SHOWS_SEARCH: 'http://api.tvmaze.com/search/shows?q=',
     SHOWS_LOOKUP: 'http://api.tvmaze.com/shows',
     SHOW_CAST: '/cast',
-    MAX_ITEMS_ON_PAGE: 9
+    MAX_ITEMS_ON_PAGE: 9,
+    MAX_PAGES_NUM: 12
   }
 }

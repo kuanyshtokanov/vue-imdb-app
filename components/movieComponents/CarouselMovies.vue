@@ -5,15 +5,14 @@
     </h3>
     <v-carousel
       :hide-delimiters="true"
-      cycle
-      height="400"
+      height="auto"
       hide-delimiter-background
       show-arrows-on-hover
     >
       <v-carousel-item v-for="(slide, i) in moviesByRating" :key="i">
         <v-row class="fill-height" justify="center">
           <div>
-            <SingleMovie :movie="slide" :height="200" :ratio="1" />
+            <SingleMovie :movie="slide" :ratio="1" :heightCard="heightSingle" />
           </div>
         </v-row>
       </v-carousel-item>
@@ -27,11 +26,17 @@ export default {
   components: {
     SingleMovie
   },
-  props: ['allMoviesList'],
+  props: ['allMoviesList', 'height'],
   data () {
     return {
       waitText: this.showWait,
-      moviesByRating: this.allMoviesList
+      moviesByRating: this.allMoviesList,
+      heightSingle: this.height
+    }
+  },
+  watch: {
+    height (val) {
+      this.heightSingle = val
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialogIsActive" width="500">
+  <v-dialog v-model="dialogIsActive" width="700">
     <v-card>
       <v-img
         :src="actorDetails.person.image.original"
@@ -16,7 +16,7 @@
           <h4>Character:</h4>
           {{ actorDetails.character.name }}
           <h3>Country:</h3>
-          {{ actorDetails.person.country.name }}
+          {{ actorDetails.person.country? actorDetails.person.country.name : 'Neverland' }}
           <h4>Born:</h4>
           {{ actorDetails.person.birthday }}
           <h5>Details:</h5>
