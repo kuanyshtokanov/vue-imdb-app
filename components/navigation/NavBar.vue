@@ -16,8 +16,8 @@
     <v-flex xs12 sm6 md3>
       <v-text-field
         v-model="searchString"
-        label="Movie Name"
         v-on:keyup.enter="searchMovie"
+        label="Movie Name"
       />
     </v-flex>
     <v-btn

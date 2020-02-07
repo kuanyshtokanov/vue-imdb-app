@@ -7,7 +7,7 @@
     <v-container v-else grid-list-xl>
       <BestMovies :allMoviesList="ratedgMovies" :height="450" />
       <v-layout wrap style="padding-top: 10px">
-        <v-flex v-for="(item, index) in this.currentMoviesList" :key="index" xs2 mb-2  class="my-2">
+        <v-flex v-for="(item, index) in currentMoviesList" :key="index" xs2 mb-2 class="my-2">
           <SingleMovie :movie="item.show ? item.show : item" />
         </v-flex>
       </v-layout>
@@ -39,12 +39,12 @@ import BestMovies from '~/components/movieComponents/CarouselMovies'
 import SingleMovie from '~/components/movieComponents/MovieCard'
 
 export default {
-  props: ['moviesSearch'],
   components: {
     Progress,
     BestMovies,
     SingleMovie
   },
+  props: ['moviesSearch'],
   data () {
     return {
       moviesList: [],
@@ -60,6 +60,11 @@ export default {
     ratedgMovies () {
       this.getHighestRatingMovies()
       return this.moviesByRating.slice(0, 9)
+    }
+  },
+  watch: {
+    moviesSearch (val) {
+      this.currentMoviesList = val
     }
   },
   mounted () {
@@ -81,6 +86,8 @@ export default {
       })
       .catch((error) => {
         console.log(error)
+        this.setIsError()
+        this.setErrorText(error)
       })
   },
   methods: {
@@ -94,6 +101,8 @@ export default {
         })
         .catch((error) => {
           console.log(error)
+          this.setIsError()
+          this.setErrorText(error)
         })
     },
     getHighestRatingMovies () {
@@ -101,11 +110,12 @@ export default {
       this.moviesByRating = allMovies.sort((a, b) =>
         (a.rating.average > b.rating.average) ? -1 : 1
       )
-    }
-  },
-  watch: {
-    moviesSearch (val) {
-      this.currentMoviesList = val
+    },
+    setIsError () {
+      this.$store.commit('error/setErrorFlag', true)
+    },
+    setErrorText (text) {
+      this.$store.commit('error/setErrorText', text)
     }
   }
 }

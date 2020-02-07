@@ -2,6 +2,7 @@
   <v-app>
     <v-container>
       <MoviesList :moviesSearch = "moviesList" />
+      <ErrorDialog />
     </v-container>
   </v-app>
 </template>
@@ -9,10 +10,12 @@
 <script>
 import mazeApi from '@/middleware/MazeApi'
 import MoviesList from '~/components/movieComponents/MoviesList'
+import ErrorDialog from '~/components/errorComponents/ErrorDialog'
 
 export default {
   components: {
-    MoviesList
+    MoviesList,
+    ErrorDialog
   },
   data () {
     return {
@@ -30,11 +33,19 @@ export default {
       })
       .catch((error) => {
         console.log(error)
+        this.setIsError()
+        this.setErrorText(error)
       })
   },
   methods: {
     singleMovie (id) {
       this.$router.push('/movies/' + id)
+    },
+    setIsError () {
+      this.$store.commit('error/setErrorFlag', true)
+    },
+    setErrorText (text) {
+      this.$store.commit('error/setErrorText', text)
     }
   }
 }

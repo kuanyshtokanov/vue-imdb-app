@@ -10,7 +10,7 @@
             <MovieDetails :movie="movie" :cast="cast" :openDialog="openDialog" />
           </v-flex>
         </v-layout>
-        <v-layout row wrap v-if="cast.length > 0">
+        <v-layout v-if="cast.length > 0" row wrap>
           <v-flex xs>
             <div class="text-xs-center">
               <CastDialog :dialog="dialog" :closeDialog="closeDialog" :details="actorDetails" />
@@ -18,6 +18,7 @@
           </v-flex>
         </v-layout>
       </div>
+      <ErrorDialog />
     </v-container>
   </v-app>
 </template>
@@ -28,6 +29,7 @@ import mazeApi from '@/middleware/MazeApi'
 import Progress from '~/components/progressComponents/Progress'
 import CastDialog from '~/components/castComponents/CastDialog'
 import MovieDetails from '~/components/movieComponents/MovieDetails'
+import ErrorDialog from '~/components/errorComponents/ErrorDialog'
 
 // var VueLoadImage = require('vue-load-image').default
 
@@ -35,7 +37,8 @@ export default {
   components: {
     Progress,
     CastDialog,
-    MovieDetails
+    MovieDetails,
+    ErrorDialog
   },
   data () {
     return {
@@ -63,6 +66,8 @@ export default {
       )
       .catch((error) => {
         console.log(error)
+        this.setIsError()
+        this.setErrorText(error)
       })
   },
   methods: {
@@ -75,6 +80,12 @@ export default {
     },
     closeDialog () {
       this.dialog = false
+    },
+    setIsError () {
+      this.$store.commit('error/setErrorFlag', true)
+    },
+    setErrorText (text) {
+      this.$store.commit('error/setErrorText', text)
     }
   }
 }

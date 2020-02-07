@@ -5,12 +5,20 @@
     </div>
     <v-card-title primary-title class="movie-card">
       <div>
-        <h3 class="grey--text">{{ singleMovie.name }}</h3>
-        <h3 class="grey--text">Rating:</h3>
+        <h3 class="grey--text">
+          {{ singleMovie.name }}
+        </h3>
+        <h3 class="grey--text">
+          Rating:
+        </h3>
         <span> {{ singleMovie.rating? singleMovie.rating.average : ' ' }}</span>
-        <div class="grey--text">Year: </div>
+        <div class="grey--text">
+          Year:
+        </div>
         <span>{{ singleMovie.premiered }}</span>
-        <div class="grey--text">Type: </div>
+        <div class="grey--text">
+          Type:
+        </div>
         <span>{{ singleMovie.type }}</span>
       </div>
     </v-card-title>
