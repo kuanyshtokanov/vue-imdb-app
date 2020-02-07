@@ -5,6 +5,7 @@
     </h3>
     <v-carousel
       :hide-delimiters="true"
+      cycle
       height="auto"
       hide-delimiter-background
       show-arrows-on-hover

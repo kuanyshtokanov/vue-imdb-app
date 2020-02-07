@@ -4,13 +4,6 @@
       <nuxt-link to="/" exact tag="span" style="cursor: pointer">
         MY IMDB APP2
       </nuxt-link>
-      <!-- <router-link
-        to="/"
-        tag="span"
-        style="cursor: pointer"
-      >
-        MY IMDB APP2
-      </router-link> -->
     </v-toolbar-title>
     <v-spacer />
     <v-flex xs12 sm6 md3>
